@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor's Appointment Management</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-size:cover ;
+            background-image: url('./images/doc_bg.jpg');
+            background-repeat: no-repeat;
+            
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.678);
+            padding: 20px;
+            width: 80%;
+            max-width: 900px;
+            border-radius: 15px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+            backdrop-filter: blur(3px);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+        }
+
+        button {
+            padding: 8px 16px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .btn-decline {
+            background-color: #dc3545;
+        }
+
+        .btn-decline:hover {
+            background-color: #c82333;
+        }
+
+        .btn-reschedule {
+            background-color: #ffc107;
+        }
+
+        .btn-reschedule:hover {
+            background-color: #e0a800;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        .reschedule-section {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .accepted {
+            background-color: rgba(40, 167, 69, 0.3); /* A transparent green */
+        }
+
+        .rescheduled {
+            background-color: rgba(255, 193, 7, 0.3); /* A transparent yellow */
+        }
+
+        header{
+            border-radius: 50px;
+            padding-left: 5px;
+            padding-right: 5px;
+            margin-left: 10px;
+            margin-right: 10px; 
+            /* To make nav bar move with the scrool make */
+            /*
+            margin-left:17vh; 
+            position:fixed;  
+            */
+            gap: 70vh;
+            justify-content: center;
+            backface-visibility: visible;
+            backdrop-filter: blur(5px);
+        }
+
+
+        .linkedtohome{  
+            text-decoration: none;
+            text-align: center;
+            margin-left: 50px;
+        }
+
+        #linktogohome{
+            color: rgba(0, 0, 0, 0.444);
+        }
+
+        #linktogohome:hover{
+            color: rgba(0, 0, 0, 0.671);
+        }
+    </style>
+</head>
+<body>
+
+
+
+        <div class="container">
+            <nav style="display: flex;">
+                
+                        <h1 style="margin-left: 25vh; color: black;">Manage Patient Appointments</h1>
+                        <h3 class="linkedtohome">
+                            <a href="index.html" class="linkedtohome" id="linktogohome" style="margin-left: 13vh;" >Home</a>
+                        </h3>
+
+            </nav>
+    
+            <!-- Appointments Table -->
+            <table id="appointmentTable">
+                <thead>
+                    <tr>
+                        <th>Patient Name</th>
+                        <th>Doctor</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Appointments will be loaded dynamically -->
+                </tbody>
+            </table>
+    
+            <!-- Reschedule Section -->
+            <div id="rescheduleSection" class="reschedule-section">
+                <h2>Reschedule Appointment</h2>
+                <form id="rescheduleForm">
+                    <label for="newDate">New Date</label>
+                    <input type="date" id="newDate" name="newDate">
+    
+                    <label for="newTime">New Time</label>
+                    <input type="time" id="newTime" name="newTime">
+    
+                    <button type="submit">Submit Reschedule</button>
+                </form>
+            </div>
+        </div>
+
+
+    <script>
+        const appointments = JSON.parse(localStorage.getItem('appointments')) || [];
+    
+        const appointmentTableBody = document.querySelector('#appointmentTable tbody');
+    
+        function loadAppointments() {
+            appointmentTableBody.innerHTML = ""; // Clear table before loading new data
+    
+            appointments.forEach((appointment, index) => {
+                const row = appointmentTableBody.insertRow();
+    
+                // Determine class based on status
+                let rowClass = '';
+                if (appointment.status === 'accepted') {
+                    rowClass = 'accepted';
+                } else if (appointment.status === 'rescheduled') {
+                    rowClass = 'rescheduled';
+                }
+    
+                row.className = rowClass; // Apply the class to the row
+                row.innerHTML = `
+                    <td>${appointment.patientName}</td>
+                    <td>${appointment.doctor}</td>
+                    <td>${appointment.date}</td>
+                    <td>${appointment.time}</td>
+                    <td>
+                        <button class="btn-accept" onclick="acceptAppointment(${index})">Accept</button>
+                        <button class="btn-decline" onclick="declineAppointment(${index})">Decline</button>
+                        <button class="btn-reschedule" onclick="toggleReschedule(${index})">Reschedule</button>
+                    </td>
+                `;
+            });
+        }
+    
+        // Accept appointment
+        function acceptAppointment(index) {
+            const confirmed = confirm(`Are you sure you want to accept the appointment with ${appointments[index].patientName}?`);
+            if (confirmed) {
+                appointments[index].status = 'accepted'; // Set status to accepted
+                localStorage.setItem('appointments', JSON.stringify(appointments)); // Update localStorage
+    
+                loadAppointments(); // Reload the table
+                alert(`Appointment with ${appointments[index].patientName} has been accepted.`);
+            }
+        }
+        
+        // Decline appointment and remove it from the database
+        function declineAppointment(index) {
+            const confirmed = confirm(`Are you sure you want to decline the appointment with ${appointments[index].patientName}?`);
+            if (confirmed) {
+                appointments.splice(index, 1); // Remove the appointment from the array
+                localStorage.setItem('appointments', JSON.stringify(appointments)); // Update localStorage
+                loadAppointments(); // Reload the table
+                alert('Appointment declined and removed.');
+            }
+        }
+
+        // Show/Hide the reschedule section
+        function toggleReschedule(index) {
+            const rescheduleSection = document.getElementById('rescheduleSection');
+            rescheduleSection.style.display = 'block';
+    
+            document.getElementById('rescheduleForm').onsubmit = function(event) {
+                event.preventDefault();
+                const newDate = document.getElementById('newDate').value;
+                const newTime = document.getElementById('newTime').value;
+    
+                if (newDate && newTime) {
+                    appointments[index].date = newDate;
+                    appointments[index].time = newTime;
+                    appointments[index].status = 'rescheduled'; // Set status to rescheduled
+    
+                    localStorage.setItem('appointments', JSON.stringify(appointments)); // Update localStorage
+    
+                    loadAppointments(); // Reload the table
+                    alert(`Appointment has been rescheduled to ${newDate} at ${newTime}.`);
+                } else {
+                    alert('Please enter a valid date and time.');
+                }
+            };
+        }
+    
+
+
+        // Load the appointments when the page is first loaded
+        loadAppointments();
+    </script>
+</body>
+</html>

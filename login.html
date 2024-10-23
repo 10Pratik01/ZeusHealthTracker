@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login as Doctor - Zeus' Healing Ledger</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* General Styles */
+        body {
+            font-family: Algerian;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            background-image: url('./images/doc_bg.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-position-y: -10px;
+        }
+
+        header {
+            background-color: #33333395;
+            color: rgba(255, 255, 255, 0.778);
+            padding: 20px;
+            text-align: center;
+            border-radius: 50px;
+            padding-left: 5px;
+            padding-right: 5px;
+            margin-left: 10px;
+            margin-right: 10px;
+            justify-content: center;
+            backface-visibility: visible;
+            backdrop-filter: blur(5px);
+        }
+
+        header h1 {
+            margin: 5;
+        }
+
+        /* Login Form Styles */
+        .login-form {
+            background-color: #ffffffbd;
+            padding: 40px;
+            margin: 40px auto;
+            max-width: 600px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .login-form h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        label {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            display: block;
+            color: #333;
+        }
+
+        input[type="email"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" style="text-decoration: none; color: rgba(255, 255, 255, 0.778);" id="indexnavlink">
+            <h1>Zeus' Healing Ledger</h1>
+
+        </a>
+    </header>
+
+    <main>
+        <section class="login-form" style="backdrop-filter: blur(3px); margin-top: 120px;">
+            <h2>Login as Doctor</h2>
+            <form id="login-doctor-form">
+                <label for="doctor-email">Email:</label>
+                <input type="email" id="doctor-email" name="doctor-email" required>
+
+                <label for="doctor-password">Password:</label>
+                <input type="password" id="doctor-password" name="doctor-password" required>
+
+                <button type="submit">Login</button>
+            </form>
+        </section>
+    </main>
+
+    <script>
+        // Doctor Login logic for login.html
+        document.getElementById('login-doctor-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const email = document.getElementById('doctor-email').value;
+            const password = document.getElementById('doctor-password').value;
+
+            // Check for default credentials (admin login)
+            if (email === "admin@gmail.com" && password === "admin") {
+                alert('Login successful as Doctor!');
+                location.href = "doctor.html"; // Redirect to doctor profile
+            } else {
+                alert('Invalid email or password!');
+            }
+        });
+    </script>
+</body>
+</html>

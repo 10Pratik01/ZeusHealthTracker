@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zeus' Healing Ledger - Home</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Add some basic styles for the modal */
+
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100vh; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 300px; /* Could be more or less, depending on screen size */
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* About Us Section */
+        .about-us {
+            padding: 0%;
+        }
+
+        .about-us-content {
+            display: flex; /* Use Flexbox */
+            justify-content: space-between; /* Space between text and image */
+            align-items: center; /* Center items vertically */
+        }
+
+        .about-text {
+            flex: 1; /* Take available space */
+            margin-right: 20px; /* Space between text and image */
+        }
+
+        .about-image {
+            flex: 0 0 40%; /* Set a fixed width for the image section */
+        }
+
+        .about-image img {
+            max-width: 100%; /* Responsive image */
+            height: auto; /* Maintain aspect ratio */
+        }
+
+        /* Media query for smaller screens */
+        @media (max-width: 768px) {
+            .about-us-content {
+                flex-direction: column; /* Stack elements vertically */
+                align-items: flex-start; /* Align items to the start */
+            }
+
+            .about-image {
+                flex: 1; /* Take full width on smaller screens */
+                margin-top: 20px; /* Add space above the image */
+            }
+        }
+
+        #doctorlogin {
+            background-color: rgb(103, 198, 246);
+            padding-top: 10px;
+            padding-bottom: 10px;
+            padding-left: 30px;
+            padding-right: 30px;
+            text-align: center;
+            border-radius: 5px;
+        }
+
+        #fpage {
+            background-image: url('fpage.jpg');
+            background-size: cover; /* Make the background cover the whole page */
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        #frontpage {
+            background-color: #ffffffb8;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        /* Contact Us Section */
+        .contact-us {
+            text-align: center;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-top: 1px solid #ccc;
+        }
+
+        .contact-us h2 {
+            margin-bottom: 10px;
+        }
+
+        .contact-us p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <div style="background-image: url(/images/home.jpg); height:4px;" id="homeheaderbgimg">
+        <header class="home-screen-header" style="background-color: #333333ab;">
+            <h1 style="font-family: Algerian; color: rgba(255, 255, 255, 0.778);">Zeus' Healing Ledger</h1>
+            <nav>
+                <ul>
+                    <li><a href="profile.html">Profile</a></li>
+                    <li><a href="appointment.html" id="book-appointment-btn">Book Appointment</a></li>
+                    <li><a href="#" id="signupLink">Sign Up</a></li>
+                    <li><a href="login.html">Login</a></li>
+                </ul>
+            </nav>
+        </header>
+    </div>
+
+    <main>
+        <section class="intro" id="fpage" style=" height: 100vh; display: flex; justify-content: center; align-items: center; flex-direction: column; background-image: url(./images/home.jpg);">
+            <div id="frontpage" style="backdrop-filter: blur(2px);">
+                <h2>Welcome to Zeus' Healing Ledger</h2>
+                <p>Streamline your medical appointments and health tracking easily.</p>
+                <button id="doctorlogin"><a href="login.html" style="text-decoration: none; color: white;">Login As Doctor</a></button>
+            </div>
+        </section>
+
+        <!-- About Us Section -->
+        <section class="about-us" style="text-align: center;">
+            <div id="abouth2" style="border:2px solid #011f4b;">
+                <div style="font-size: 3rem;">About Us</div>
+            </div>
+            <div class="about-us-content">
+                <div class="about-text">
+                    <p style="font-size: larger;">Welcome to one of the top medical clinics in town, where your health is our priority. Our expert team includes **Dr. Zeus** (Skin Specialist), **Dr. Athena** (Eye Specialist), and **Dr. Hermes** (ENT Specialist), all highly qualified to provide exceptional care in their respective fields. We invite you to easily **log in and book an appointment** with our specialists at your convenience. Your well-being is in expert hands with us!</p>
+                </div>
+                <div class="about-image">
+                    <img src="./images/certificate.jpg" alt="About Us Image"> <!-- Ensure the image path is correct -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Contact Us Section -->
+    <section class="contact-us">
+        <h2>Contact Us</h2>
+        <p><strong>Phone:</strong> +1 (123) 456-7890</p>
+        <p><strong>Email:</strong> support@zeushealingledger.com</p>
+    </section>
+
+    <!-- Modal for Patient Signup -->
+    <div id="signupModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="signupClose">&times;</span>
+            <h2>Signup</h2>
+            <form id="signupForm">
+                <label for="signupName">Name:</label>
+                <input type="text" id="signupName" required>
+                <label for="signupEmail">Email:</label>
+                <input type="email" id="signupEmail" required>
+                <label for="signupPassword">Password:</label>
+                <input type="password" id="signupPassword" required>
+                <button type="submit">Signup</button>
+            </form>
+            <div id="signupFeedback" style="display:none;color:red;"></div>
+        </div>
+    </div>
+
+    <footer style="border-top: 2px solid #011f4b; width: auto;">
+        <p>© 2024 Zeus' Healing Ledger. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // Open Signup Modal
+        document.getElementById('signupLink').onclick = function() {
+            document.getElementById('signupModal').style.display = 'block';
+        }
+
+        // Close Signup Modal
+        document.getElementById('signupClose').onclick = function() {
+            document.getElementById('signupModal').style.display = 'none';
+        }
+
+        // Handle Signup Form Submission
+        document.getElementById('signupForm').onsubmit = function(event) {
+            event.preventDefault(); // Prevent the default form submission
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+
+            // Save the new patient to localStorage
+            const patients = JSON.parse(localStorage.getItem('patients')) || [];
+            patients.push({ name, email, password });
+            localStorage.setItem('patients', JSON.stringify(patients));
+            alert('Signup successful! You can now log in.');
+            document.getElementById('signupModal').style.display = 'none'; // Close the modal
+        }
+
+        // Close the modal when the user clicks outside the modal
+        window.onclick = function(event) {
+            if (event.target === document.getElementById('signupModal')) {
+                document.getElementById('signupModal').style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
