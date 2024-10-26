@@ -27,7 +27,7 @@
             background-color: rgba(255, 255, 255, 0.678);
             padding: 20px;
             width: 80%;
-            max-width: 1000px;
+            max-width: 150vh;
             border-radius: 15px;
             box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
             backdrop-filter: blur(3px);
@@ -146,14 +146,45 @@
         .overlay.show {
             display: flex; /* Show overlay and center panel */
         }
+
+        .top {
+            display: flex;
+            justify-content: space-between; /* Space between items */
+            align-items: center;
+            width: 100%; /* Ensure the nav takes the full width */
+        }
+
+        .heading1 {
+            flex: 1; /* Allow heading to take available space */
+            text-align: center; /* Center the heading text */
+        }
+
+        .linkedtohome {
+            justify-content: right !important;
+            align-items: end;
+            justify-items: right;
+            margin-bottom: 30px;
+            opacity: 20%;
+        }
+
+        .linkedtohome:hover {
+            opacity: 100%;
+            transition: 0.1s ease-in;
+        }
+
+        /* Reschedule Section */
+        .reschedule-section {
+            display: none; /* Hide by default */
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <nav style="display: flex;">
-            <h1 style="margin-left: 25vh; color: black;">Manage Patient Appointments</h1>
+        <nav class="top">
+            <h1 class="heading1">Manage Patient Appointments</h1>
             <h3 class="linkedtohome">
-                <a href="index.html" class="linkedtohome" id="linktogohome" style="margin-left: 33vh; align-items: left;">Home</a>
+                <a href="index.html" class="linkedtohome" id="linktogohome">Home</a>
             </h3>
         </nav>
 
@@ -162,6 +193,7 @@
             <thead>
                 <tr>
                     <th>Patient Name</th>
+                    <th>Patient Last Name</th>
                     <th>Doctor</th>
                     <th>Date</th>
                     <th>Time</th>
@@ -173,6 +205,18 @@
             </tbody>
         </table>
 
+        <!-- Reschedule Section -->
+        <div class="reschedule-section" id="rescheduleSection">
+            <h3>Reschedule Appointment</h3>
+            <form id="rescheduleForm">
+                <label for="newDate">New Date:</label>
+                <input type="date" id="newDate" required>
+                <label for="newTime">New Time:</label>
+                <input type="time" id="newTime" required>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+
         <!-- Overlay for patient details panel -->
         <div class="overlay" id="overlay">
             <div class="details-panel">
@@ -181,6 +225,7 @@
                     <button class="close-btn" onclick="toggleDetailsPanel()">✕</button>
                 </div>
                 <p id="detailPatientName"></p>
+                <p id="detailPatientlastName"></p>
                 <p id="detailDoctor"></p>
                 <p id="detailDate"></p>
                 <p id="detailTime"></p>
@@ -190,7 +235,6 @@
 
     <script>
         const appointments = JSON.parse(localStorage.getItem('appointments')) || [];
-
         const appointmentTableBody = document.querySelector('#appointmentTable tbody');
 
         function loadAppointments() {
@@ -199,8 +243,21 @@
             appointments.forEach((appointment, index) => {
                 const row = appointmentTableBody.insertRow();
                 
+                // Set background color based on appointment status
+                let backgroundColor;
+                if (appointment.status === 'accepted') {
+                    backgroundColor = '#55d85a94'; // Light green
+                } else if (appointment.status === 'rescheduled') {
+                    backgroundColor = '#e3d13074'; // Light yellow
+                } else {
+                    backgroundColor = ''; // Default
+                }
+
+                row.style.backgroundColor = backgroundColor;
+                
                 row.innerHTML = `
                     <td>${appointment.patientName}</td>
+                    <td>${appointment.patientLastName}</td>
                     <td>${appointment.doctor}</td>
                     <td>${appointment.date}</td>
                     <td>${appointment.time}</td>
@@ -238,7 +295,13 @@
             const rescheduleSection = document.getElementById('rescheduleSection');
             rescheduleSection.style.display = 'block';
 
-            document.getElementById('rescheduleForm').onsubmit = function(event) {
+            // Reset the form fields
+            document.getElementById('newDate').value = '';
+            document.getElementById('newTime').value = '';
+
+            // Add event listener to handle form submission
+            const rescheduleForm = document.getElementById('rescheduleForm');
+            rescheduleForm.onsubmit = function(event) {
                 event.preventDefault();
                 const newDate = document.getElementById('newDate').value;
                 const newTime = document.getElementById('newTime').value;
@@ -246,11 +309,11 @@
                 if (newDate && newTime) {
                     appointments[index].date = newDate;
                     appointments[index].time = newTime;
-                    appointments[index].status = 'rescheduled';
-
+                    appointments[index].status = 'rescheduled'; // Update status to 'rescheduled'
                     localStorage.setItem('appointments', JSON.stringify(appointments));
                     loadAppointments();
                     alert(`Appointment has been rescheduled to ${newDate} at ${newTime}.`);
+                    rescheduleSection.style.display = 'none'; // Hide section after rescheduling
                 } else {
                     alert('Please enter a valid date and time.');
                 }
@@ -259,21 +322,31 @@
 
         function toggleshowpatientdetails(index) {
             const appointment = appointments[index];
-            toggleDetailsPanel(appointment);
+            const patientProfile = JSON.parse(localStorage.getItem('patientdetail'));
+
+            if (patientProfile && 
+                patientProfile.editName.toLowerCase() === appointment.patientName.toLowerCase() &&
+                patientProfile.editlastName.toLowerCase() === appointment.patientLastName.toLowerCase()) {
+                toggleDetailsPanel(patientProfile);
+            } else {
+                alert('No details found for this patient.');
+            }
         }
 
-        function toggleDetailsPanel(appointment = null) {
+        function toggleDetailsPanel(patientProfile = null) {
             const overlay = document.getElementById('overlay');
             const detailPatientName = document.getElementById('detailPatientName');
+            const detailPatientlastName = document.getElementById('detailPatientlastName');
             const detailDoctor = document.getElementById('detailDoctor');
             const detailDate = document.getElementById('detailDate');
             const detailTime = document.getElementById('detailTime');
 
-            if (appointment) {
-                detailPatientName.textContent = `Patient: ${appointment.patientName}`;
-                detailDoctor.textContent = `Doctor: ${appointment.doctor}`;
-                detailDate.textContent = `Date: ${appointment.date}`;
-                detailTime.textContent = `Time: ${appointment.time}`;
+            if (patientProfile) {
+                detailPatientName.textContent = `Patient First Name: ${patientProfile.editName}`;
+                detailPatientlastName.textContent = `Patient Last Name: ${patientProfile.editlastName}`;
+                detailDoctor.textContent = `Age: ${patientProfile.editage}`;
+                detailDate.textContent = `Weight: ${patientProfile.editWeight} kg`;
+                detailTime.textContent = `Temperature: ${patientProfile.editTemperature} °F`;
                 overlay.classList.add('show');
             } else {
                 overlay.classList.remove('show');

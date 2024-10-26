@@ -34,6 +34,7 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            font-size: medium;
             transition: background-color 0.3s;
         }
 
@@ -74,6 +75,17 @@
         #indexnavlink{
             font-family: Algerian;
         }
+
+        #bookapp{
+            margin-left: 10vh;
+            background-color: rgb(5, 157, 5);
+            font-size: medium;
+        }
+
+        #bookapp:hover{
+            background-color: rgba(3, 115, 3, 0.832);
+
+        }
     </style>
 
     <header>
@@ -92,8 +104,11 @@
         <section class="profile">
             <h2>Enter Your Health Profile</h2>
             <div id="editForm">
-                <label for="editName">Name:</label>
+                <label for="editName"> First Name:</label>
                 <input type="text" id="editName" required>
+
+                <label for="editName"> Last Name:</label>
+                <input type="text" id="editlastName" required>
 
                 <label for="editAge">Age:</label>
                 <input type="number" id="editAge" min="1" max="120" required>
@@ -104,7 +119,8 @@
                 <label for="editTemperature">Temperature (°F):</label>
                 <input type="text" id="editTemperature" required>
 
-                <button id="saveProfile">Save Profile</button>
+                <button id="saveProfile" class="savepro">Save Profile</button>
+                <button id="bookapp" class="savepro"><a href="appointment.html" style="text-decoration: none; color: white;">Book Appointment</a></button>
             </div>
         </section>
 
@@ -112,20 +128,26 @@
             const saveButton = document.getElementById('saveProfile');
             saveButton.addEventListener('click', function() {
                 const name = document.getElementById('editName').value;
+                const  lastName = document.getElementById('editlastName').value;
                 const age = document.getElementById('editAge').value;
                 const weight = document.getElementById('editWeight').value;
                 const temp = document.getElementById('editTemperature').value;
+                
+                const patientdetail = {editName : name , editage : age, editWeight : weight,  editTemperature: temp, editlastName : lastName};
+                localStorage.setItem('patientdetail', JSON.stringify(patientdetail));
+                
+                alert("Patient added succesfull"); 
+                form.reset();
+                // if (name && age && weight && temp) {
+                //     localStorage.setItem('patientName', name);
+                //     localStorage.setItem('age', age);
+                //     localStorage.setItem('weight', weight);
+                //     localStorage.setItem('temperature', temp);
 
-                if (name && age && weight && temp) {
-                    localStorage.setItem('patientName', name);
-                    localStorage.setItem('age', age);
-                    localStorage.setItem('weight', weight);
-                    localStorage.setItem('temperature', temp);
-
-                    alert('Profile updated successfully!');
-                } else {
-                    alert('Please fill in all fields.');
-                }
+                //     alert('Profile updated successfully!');
+                // } else {
+                //     alert('Please fill in all fields.');
+                // }
             });
         </script>
     </main>

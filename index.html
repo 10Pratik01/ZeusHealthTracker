@@ -124,6 +124,10 @@
         .contact-us p {
             margin: 5px 0;
         }
+
+        #indexul{
+            font-size: large;
+        }
     </style>
 </head>
 <body>
@@ -132,10 +136,10 @@
         <header class="home-screen-header" style="background-color: #333333ab;">
             <h1 style="font-family: Algerian; color: rgba(255, 255, 255, 0.778);">Zeus' Healing Ledger</h1>
             <nav>
-                <ul>
+                <ul id="indexul">
                     <li><a href="profile.html">Profile</a></li>
                     <li><a href="appointment.html" id="book-appointment-btn">Book Appointment</a></li>
-                    <li><a href="#" id="signupLink">Sign Up</a></li>
+                    <!-- <li><a href="#" id="signupLink">Sign Up</a></li> -->
                     <li><a href="login.html">Login</a></li>
                 </ul>
             </nav>
@@ -147,7 +151,7 @@
             <div id="frontpage" style="backdrop-filter: blur(2px);">
                 <h2>Welcome to Zeus' Healing Ledger</h2>
                 <p>Streamline your medical appointments and health tracking easily.</p>
-                <button id="doctorlogin"><a href="login.html" style="text-decoration: none; color: white;">Login As Doctor</a></button>
+                <button id="doctorlogin"><a href="profile.html" style="text-decoration: none; color: white;">Create Profile</a></button>
             </div>
         </section>
 
@@ -185,8 +189,8 @@
                 <label for="signupEmail">Email:</label>
                 <input type="email" id="signupEmail" required>
                 <label for="signupPassword">Password:</label>
-                <input type="password" id="signupPassword" required>
-                <button type="submit">Signup</button>
+                <!-- <input type="password" id="signupPassword" required>
+                <button type="submit">Signup</button> -->
             </form>
             <div id="signupFeedback" style="display:none;color:red;"></div>
         </div>
