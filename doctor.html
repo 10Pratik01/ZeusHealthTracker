@@ -306,51 +306,29 @@
                 const newDate = document.getElementById('newDate').value;
                 const newTime = document.getElementById('newTime').value;
 
-                if (newDate && newTime) {
-                    appointments[index].date = newDate;
-                    appointments[index].time = newTime;
-                    appointments[index].status = 'rescheduled'; // Update status to 'rescheduled'
-                    localStorage.setItem('appointments', JSON.stringify(appointments));
-                    loadAppointments();
-                    alert(`Appointment has been rescheduled to ${newDate} at ${newTime}.`);
-                    rescheduleSection.style.display = 'none'; // Hide section after rescheduling
-                } else {
-                    alert('Please enter a valid date and time.');
-                }
+                appointments[index].date = newDate;
+                appointments[index].time = newTime;
+                appointments[index].status = 'rescheduled'; // Update status to rescheduled
+                localStorage.setItem('appointments', JSON.stringify(appointments));
+                loadAppointments();
+                rescheduleSection.style.display = 'none'; // Hide reschedule section after submitting
+                alert('Appointment rescheduled successfully.');
             };
         }
 
         function toggleshowpatientdetails(index) {
             const appointment = appointments[index];
-            const patientProfile = JSON.parse(localStorage.getItem('patientdetail'));
-
-            if (patientProfile && 
-                patientProfile.editName.toLowerCase() === appointment.patientName.toLowerCase() &&
-                patientProfile.editlastName.toLowerCase() === appointment.patientLastName.toLowerCase()) {
-                toggleDetailsPanel(patientProfile);
-            } else {
-                alert('No details found for this patient.');
-            }
+            document.getElementById('detailPatientName').innerText = `Patient Name: ${appointment.patientName}`;
+            document.getElementById('detailPatientlastName').innerText = `Patient Last Name: ${appointment.patientLastName}`;
+            document.getElementById('detailDoctor').innerText = `Doctor: ${appointment.doctor}`;
+            document.getElementById('detailDate').innerText = `Date: ${appointment.date}`;
+            document.getElementById('detailTime').innerText = `Time: ${appointment.time}`;
+            toggleDetailsPanel();
         }
 
-        function toggleDetailsPanel(patientProfile = null) {
+        function toggleDetailsPanel() {
             const overlay = document.getElementById('overlay');
-            const detailPatientName = document.getElementById('detailPatientName');
-            const detailPatientlastName = document.getElementById('detailPatientlastName');
-            const detailDoctor = document.getElementById('detailDoctor');
-            const detailDate = document.getElementById('detailDate');
-            const detailTime = document.getElementById('detailTime');
-
-            if (patientProfile) {
-                detailPatientName.textContent = `Patient First Name: ${patientProfile.editName}`;
-                detailPatientlastName.textContent = `Patient Last Name: ${patientProfile.editlastName}`;
-                detailDoctor.textContent = `Age: ${patientProfile.editage}`;
-                detailDate.textContent = `Weight: ${patientProfile.editWeight} kg`;
-                detailTime.textContent = `Temperature: ${patientProfile.editTemperature} °F`;
-                overlay.classList.add('show');
-            } else {
-                overlay.classList.remove('show');
-            }
+            overlay.classList.toggle('show');
         }
 
         loadAppointments();
